@@ -15,7 +15,7 @@ void start(){
 
 void end(){
     // wszystko to co sie powtarza na koncu kazdej rundy tj:
-    //wyrownanie balansu; wyczyszczenie reku; 
+    //wyrownanie balansu; wyczyszczenie reku 
 }
 
 
@@ -23,6 +23,8 @@ void end(){
 int main() {
 
     int round = 1;
+    int initialBet; //tu trzeba imo cin zrobic i gracz podaje ile ma pieniedzy
+
     deck Talia;
     Talia.shuffleDeck();
     croupier Krupier;

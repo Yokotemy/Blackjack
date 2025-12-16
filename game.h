@@ -14,10 +14,11 @@ class game {
     int round = 1;
     public:
         game();
-        void setBet(int Bet);
+        void setBet(int Bet); //jak to jest w player tez to chyba nie trzeba rozpisywac tego 
+        //w game.cpp cn
         void setUpGame();
         void gameplay();
-        void compareDecks();
+        int compareDecks(hand& player, hand& croupier); //ja bym zrobila int gdzie np 0-to samo, 1-gracz wincyj, 2-krupier wincyj
 
 };
 
