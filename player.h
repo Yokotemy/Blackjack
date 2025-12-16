@@ -12,6 +12,7 @@ class player: person {
         int getBalance();
         void setStand();
         void split();
+        void setName(std::string& Name);
 };
 
 
