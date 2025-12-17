@@ -14,6 +14,7 @@ class hand {
         void takeCard(card Card); // wzięcie karty do ręki
         bool isEmpty();
         int calculateHand(); // obliczenie warości ręki
+        void clear();
 };
 
 #endif //BLACKJACK_HAND_H

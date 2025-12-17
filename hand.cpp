@@ -73,3 +73,7 @@ card hand::removeCard(int index) {
     cards.erase(cards.begin() + index);
     return c;
 }
+
+void hand::clear() {
+    cards.clear();
+}

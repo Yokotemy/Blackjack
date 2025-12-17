@@ -8,11 +8,10 @@
 #include "card.h"
 
 
-void start(int round, int initialBet, player &p, croupier &c,deck &d){
-    //wszystko to co sie powtarza na początku każdej rundy tj:
-    //runda ++; placingbet; shuffledeck; player karta 2 krupier karta 2
+void start(int round,player &p, croupier &c,deck &d){
+    //initialise round, bet, shuffling deck, dealing and showing cards
+    //repeatable actions in every round
     int rd = round;
-    int iB = initialBet;
     int Bet;
 
     round++;
@@ -33,9 +32,13 @@ void start(int round, int initialBet, player &p, croupier &c,deck &d){
 
 }
 
-void end(){
+void end(int wygrana, player &p, croupier &c){
     // wszystko to co sie powtarza na koncu kazdej rundy tj:
     //wyrownanie balansu; wyczyszczenie reku 
+
+    p.setBalance(wygrana);
+    p.clearHands();
+    c.clearHands();
 }
 
 

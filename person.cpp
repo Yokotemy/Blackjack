@@ -31,5 +31,18 @@ void person::setName(std::string &Name) {
 hand& person::getHand(int index) {
     return hands[index];
 }
+void person::clearHands() {
+    if (hands.empty()) return;
+
+    //czysci karty wszystkie
+    for (hand& h : hands) {
+        h.clear();
+    }
+
+    //jakby byl split np to zostawia tylko jedna reke do istnienia
+    hand firstHand = hands[0];
+    hands.clear(); 
+    hands.push_back(firstHand); 
+}
 
 
