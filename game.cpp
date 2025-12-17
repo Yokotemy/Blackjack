@@ -63,7 +63,7 @@ int game::res_double(player &p, croupier &c, int Bet, int wygrana, deck &d){
     res = compareDecks(p.getHand(0), c.getHand(0));
     switch(res){
         case 0:
-            std::cout << "Remis! Twój zakład wraca do Ciebie!" << std::endl;
+            std::cout << "Remis! Twój zakład wraca do Ciebie." << std::endl;
             wygrana = 2*Bet;
             int decyzja = gamehelpy(wygrana, p, Bet);
             return decyzja; 
@@ -73,7 +73,10 @@ int game::res_double(player &p, croupier &c, int Bet, int wygrana, deck &d){
             int decyzja = gamehelpy(wygrana, p, Bet);
             return decyzja;
         case 2:
-
+            std::cout << "Przegrywasz." << std::endl;
+            wygrana = 0;
+            int decyzja = gamehelpy(wygrana, p, Bet);
+            return decyzja; 
     }
 }
 
@@ -86,14 +89,16 @@ int game::gameplay(int Bet, player &p, croupier &c, deck &d){
         if (p.getHand(0).calculateHand() == 21){
             std::cout << "BLACKJACK! Wygrywasz!\n";
             wygrana = 2.5*Bet;
-            int decyzja = gamehelpy(wygrana, p);
+            int decyzja = gamehelpy(wygrana, p, Bet);
             f = false;
             return decyzja;
         }
         std::cout << "Co chcesz zrobic? (stand/double/hit/split)" << std::endl;
         std::cin >> move;
         if (move == "double"){
-            
+            int decyzja = res_double(p,c,Bet,wygrana,d);
+            f = false;
+            return decyzja;
         }
         else {
             std::cout << "Nie rozponano ruchu. Co chcesz zrobic? (stand/double/hit/split)" << std::endl;
