@@ -9,10 +9,12 @@ class hand {
 
     public:
         void displayHand(); // wyświetlenie ręki
-        card getCard(int index);
+        card& getCard(int index);
+        card removeCard(int index);
         void takeCard(card Card); // wzięcie karty do ręki
         bool isEmpty();
         int calculateHand(); // obliczenie warości ręki
+        void clear();
 };
 
 #endif //BLACKJACK_HAND_H

@@ -17,12 +17,16 @@ void hand::displayHand() {
     if (cards.empty()) {
         std::cout << "Empty hand" << std::endl;
     }
-    for (card card : cards) {
-        card.displayCard();
+    for (card& c : cards){
+        if (c.isVisible()){
+            c.displayCard();
+        }
+        else std::cout << "Hidden card";
+        std::cout << " ";
     }
 }
 
-card hand::getCard(int index) {
+card& hand::getCard(int index) {
     return cards[index];
 }
 
@@ -48,4 +52,28 @@ int hand::calculateHand() {
         max<11 ? sum+=1 : sum+=11;
     }
     return sum;
+}
+
+/*int sum = 0;
+int Aces = 0;
+for (card& c : cards) {
+    if (c.getFace() == Face::ace) Aces++;
+    sum += val(c.getFace());
+}
+while (Aces > 0) {
+    // jeśli dodanie 11 nie spowoduje przekroczenia 21, dodaj 11
+    if (sum + 11 <= 21) sum += 11;
+    else sum += 1;
+    Aces--;
+}*/
+//taka o implementacje znalazlam bo niby ta nasza ma sie sypac kiedy bedzie wiecej asow ale ja tam nw
+
+card hand::removeCard(int index) {
+    card c = cards[index];
+    cards.erase(cards.begin() + index);
+    return c;
+}
+
+void hand::clear() {
+    cards.clear();
 }
