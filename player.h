@@ -17,6 +17,6 @@ class player: public person {
         void setDouble(int Bet,deck &D);
 
 };
-
+//stad chyba wyjebue te setstand itd bo mi lepiej to biedzie spiac w game
 
 #endif //BLACKJACK_PLAYER_H
