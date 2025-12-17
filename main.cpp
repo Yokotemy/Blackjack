@@ -23,9 +23,11 @@ void start(int round, int initialBet, player &p, croupier &c,deck &d){
 
     d.shuffleDeck();
     p.takeCard(d);
-    p.showDeck();
     c.takeCard(d);
-    c.showDeck();
+    p.takeCard(d);
+    c.takeCard(d);
+
+    c.
     
 
 

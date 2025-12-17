@@ -17,12 +17,17 @@ void hand::displayHand() {
     if (cards.empty()) {
         std::cout << "Empty hand" << std::endl;
     }
-    for (card card : cards) {
-        card.displayCard();
+
+    for (card& c : cards){
+        if (c.isVisible()){
+            c.displayCard();
+        }
+        else std::cout << "Hidden card";
+        std::cout << " ";
     }
 }
 
-card hand::getCard(int index) {
+card& hand::getCard(int index) {
     return cards[index];
 }
 
