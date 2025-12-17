@@ -25,7 +25,6 @@ int game::compareDecks(hand& player, hand& croupier){
         return 2;
     }
     else {return 0;}
-
 }
 
 

@@ -49,3 +49,9 @@ int hand::calculateHand() {
     }
     return sum;
 }
+
+card hand::removeCard(int index) {
+    card c = cards[index];
+    cards.erase(cards.begin() + index);
+    return c;
+}

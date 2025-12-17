@@ -8,9 +8,27 @@
 #include "card.h"
 
 
-void start(){
+void start(int round, int initialBet, player &p, croupier &c,deck &d){
     //wszystko to co sie powtarza na początku każdej rundy tj:
     //runda ++; placingbet; shuffledeck; player karta 2 krupier karta 2
+    int rd = round;
+    int iB = initialBet;
+    int Bet;
+
+    round++;
+
+    std::cout << "Postaw zakład: ";
+    std::cin >> Bet; 
+    p.setBet(Bet);
+
+    d.shuffleDeck();
+    p.takeCard(d);
+    p.showDeck();
+    c.takeCard(d);
+    c.showDeck();
+    
+
+
 }
 
 void end(){

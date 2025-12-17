@@ -12,12 +12,16 @@ enum class Color {clover, spade, heart, diamond};
 class card {
     Face face;
     Color color;
+    bool visible; //zeby karty krupiera mogly byc zakryte
 
     public:
         card();
         card(Face f, Color c);
         void displayCard(); // wyświetlanie karty
         Face getFace();  // getter dla face'a
+        void show();
+        void hide();
+        bool isVisible();
 };
 
 #endif //BLACKJACK_CARD_H
