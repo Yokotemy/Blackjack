@@ -37,7 +37,7 @@ int game::is_busted(player &p,croupier &c){
         return 1; //1 - jest busted, 0 - nie jest
     }
     return 0;
-}
+}//przeniesc jako metoda person nie game
 
 int gamehelpy(int wygrana, player &p, int Bet){
     int decyzja = 69;
