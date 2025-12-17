@@ -2,7 +2,9 @@
 #include<vector>
 #include "croupier.h"
 
-void croupier::showDeck(int round) {
+//w sumie to ja to wszystko jak na razie w start() robie
+
+/*void croupier::showDeck(int round) {
     if (round == 1) {
         hands[0].getCard(0).displayCard();
         std::cout << " ?" << std::endl;
@@ -11,7 +13,6 @@ void croupier::showDeck(int round) {
         hands[0].displayHand();
     }
 }
-
 void croupier::takeCard(deck& D) {
     if (hands[0].isEmpty()) {
         hands[0].takeCard(D.giveCard());
@@ -22,4 +23,4 @@ void croupier::takeCard(deck& D) {
             hands[0].takeCard(D.giveCard());
         }
     }
-}
+}*/

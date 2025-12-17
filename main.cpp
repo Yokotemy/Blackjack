@@ -9,14 +9,14 @@
 
 
 void start(int round,player &p, croupier &c,deck &d){
-    //initialise round, bet, shuffling deck, dealing and showing cards
+    //initialising round & bet, shuffling deck, dealing and showing cards
     //repeatable actions in every round
     int rd = round;
     int Bet;
 
     round++;
-
-    std::cout << "Postaw zakład: ";
+    std::cout << "Twój obecny balans wynosi: " << p.getBalance() << "\n";
+    std::cout << "Postaw zakład: " << std::endl;
     std::cin >> Bet; 
     p.setBet(Bet);
 
@@ -33,8 +33,8 @@ void start(int round,player &p, croupier &c,deck &d){
 }
 
 void end(int wygrana, player &p, croupier &c){
-    // wszystko to co sie powtarza na koncu kazdej rundy tj:
-    //wyrownanie balansu; wyczyszczenie reku 
+    // paying player their win, clearing hands for dealer and player
+    //additionally deleting extra hands if player did split
 
     p.setBalance(wygrana);
     p.clearHands();

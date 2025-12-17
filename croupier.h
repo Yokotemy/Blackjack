@@ -8,9 +8,9 @@
 #include "hand.h"
 
 class croupier : public person {
-    public:
+    /*public:
         void showDeck(int round);
-        void takeCard(deck& D);
+        void takeCard(deck& D);*/
 };
 
 

@@ -8,6 +8,13 @@ person::person() {
 person::person(std::string& name, std::vector<hand> hands) : name(name) {
     hands.push_back(hand());
 }
+/*person::person(std::string& name, std::vector<hand> h) : name(name), hands(h) {
+    if (hands.empty()) {
+        hands.push_back(hand()); // zawsze dodajemy pierwszą pustą rękę
+    }
+}
+*/
+//podobno tak ma byc lepiej ale co ja tam wiem
 
 void person::showDeck() {
     for (hand hand : hands) {
