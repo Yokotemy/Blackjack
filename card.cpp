@@ -5,8 +5,8 @@
 card::card()
     :face(Face::two), color(Color::clover) {}
 
-card::card(Face face, Color color)
-    :face(face), color(color) {}
+card::card(Face face, Color color, bool v)
+    :face(face), color(color), visible(v) {}
 
 // wyświetlanie face'a
 std::string faceToString(Face f) {
@@ -31,7 +31,23 @@ std::string colorToString(Color c) {
     return "?";
 }
 
+void card::hide(){
+    visible = false;
+}
+
+void card::show(){
+    visible = true;
+}
+
+bool card::isVisible(){
+    return visible;
+}
+
 void card::displayCard() {
+    if (!visible){
+        std::cout << "Hidden card";
+        return;
+    }
     std::cout << faceToString(face) << ' ' << colorToString(color) << std::endl;
 }
 
