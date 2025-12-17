@@ -16,6 +16,7 @@ class person {
         void setName(std::string& Name);
         void showDeck();
         void takeCard(deck &D);
+        hand& getHand(int index); //zeby moc sie dostac do karty krupiera i ja zakryc
 };
 
 

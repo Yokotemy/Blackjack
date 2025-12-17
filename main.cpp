@@ -22,14 +22,14 @@ void start(int round, int initialBet, player &p, croupier &c,deck &d){
     p.setBet(Bet);
 
     d.shuffleDeck();
+
     p.takeCard(d);
     c.takeCard(d);
     p.takeCard(d);
     c.takeCard(d);
-
-    c.
-    
-
+    c.getHand(0).getCard(1).hide(); //ukrycie drugiej karty krupiera
+    p.getHand(0).displayHand();
+    c.getHand(0).displayHand();
 
 }
 

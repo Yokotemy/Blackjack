@@ -28,3 +28,8 @@ void person::setName(std::string &Name) {
     name = Name;
 }
 
+hand& person::getHand(int index) {
+    return hands[index];
+}
+
+
