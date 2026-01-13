@@ -1,6 +1,6 @@
 #include<vector>
 #include "person.h"
-
+#include <iostream> 
 person::person() {
     name = "Unknown";
     hands.push_back(hand());
@@ -50,6 +50,17 @@ void person::clearHands() {
     hand firstHand = hands[0];
     hands.clear(); 
     hands.push_back(firstHand); 
+}
+
+int person::is_busted(){
+    bool busted = false;
+    int dupadupa = 69696969;//do zmniany ale nie mam juz sily na to 
+    dupadupa = getHand(0).calculateHand();
+    if (dupadupa > 21){
+        std::cout << "BUSTED!" << std::endl;
+        return 1; //1 - jest busted, 0 - nie jest
+    }
+    return 0;
 }
 
 

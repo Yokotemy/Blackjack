@@ -18,6 +18,7 @@ class person {
         void takeCard(deck &D);
         hand& getHand(int index); //zeby moc sie dostac do karty krupiera i ja zakryc
         void clearHands();
+        int is_busted();
 };
 
 
