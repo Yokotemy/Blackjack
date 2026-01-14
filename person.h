@@ -5,7 +5,7 @@
 #include<string>
 #include "hand.h"
 #include "deck.h"
-
+//trzrba zrobic zeby player i croupier dziedziczyly po person, idk jak mozesz ty:3
 class person {
      protected:
         std::string name;
