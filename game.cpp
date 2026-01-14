@@ -14,6 +14,10 @@ void game::setUpGame() {
     std::cout << "Podaj nazwę użytkownika: ";
     std::cin >> Name;
     Player.setName(Name);
+    std::cout << "\nPodaj ile masz pieniędzy: " ; //weź to refrase jakos ladnie bo to glupio brzmi XD
+    int mamona;
+    std::cin>> mamona;
+    Player.setBalance(mamona);
 }
 
 int game::compareDecks(hand& player, hand& croupier){

@@ -2,7 +2,7 @@
 #include<vector>
 #include "croupier.h"
 
-//w sumie to ja to wszystko jak na razie w start() robie
+//trzeba override zrobic i mi sie nie chce
 
 /*void croupier::showDeck(int round) {
     if (round == 1) {

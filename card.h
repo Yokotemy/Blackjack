@@ -17,11 +17,11 @@ class card {
     public:
         card();
         card(Face f, Color c, bool v = true);
-        void displayCard(); // wyświetlanie karty
-        Face getFace();  // getter dla face'a
+        void displayCard() const; // wyświetlanie karty
+        Face getFace() const;  // getter dla face'a
         void show();
         void hide();
-        bool isVisible();
+        bool isVisible() const; //idk co te const daja ale chat kazal to robie lol
 };
 
 #endif //BLACKJACK_CARD_H
