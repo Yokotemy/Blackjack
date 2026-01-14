@@ -42,7 +42,7 @@ int gamehelpy(int wygrana, player &p, int Bet){
         switch(decyzja){
             case 0:
                 std::cout << "Dzięki za grę!";
-                return 0;
+                return 0; //to konczy wszystko wszystko i to bedzie obslugiwane w main
             case 1:
                 std::cout << "Kolejna runda!";
                 return 1;
@@ -73,7 +73,7 @@ int game::res_double(player &p, croupier &c, int Bet, int wygrana, deck &d){
     // check if croupier busted after drawing
     if (c.is_busted()){
         std::cout << "Krupier busted!" << std::endl;
-        wygrana = 2*Bet; // example payout
+        wygrana = 2*Bet; 
         return gamehelpy(wygrana, p, Bet);
     }
 
@@ -99,20 +99,25 @@ int game::res_stand(player &p, croupier &c, int Bet, int wygrana, deck &d){
         }
     }
 
-    int res = compareDecks(p.getHand(0), c.getHand(0));
+    int res = 67;
+    res = compareDecks(p.getHand(0), c.getHand(0));
     switch(res){
         case 0:
             std::cout << "Remis! Twój zakład wraca do Ciebie." << std::endl;
             wygrana = Bet;
-            return gamehelpy(wygrana, p, Bet); 
+            int decyzja = gamehelpy(wygrana, p, Bet);
+            return decyzja;
+ 
         case 1:
             std::cout << "Wygrywasz!" << std::endl;
             wygrana = 2*Bet;
-            return gamehelpy(wygrana, p, Bet);
+            int decyzja = gamehelpy(wygrana, p, Bet);
+            return decyzja;
         case 2:
             std::cout << "Przegrywasz." << std::endl;
             wygrana = 0;
-            return gamehelpy(wygrana, p, Bet); 
+            int decyzja = gamehelpy(wygrana, p, Bet);
+            return decyzja;
     }
 }
 
@@ -131,17 +136,12 @@ int game::gameplay(int Bet, player &p, croupier &c, deck &d){
             return decyzja;
         }
 
-        std::cout << "Co chcesz zrobic? (stand/double/hit/split)" << std::endl;
+        std::cout << "Co chcesz zrobic? (stand/double/hit): " << std::endl;
         MoveStrategy* strat = nullptr;
         std::cin >> move;
         if (move == "stand") strat = new StandStrategy();
         else if (move == "double") strat = new DoubleStrategy();
         else if (move == "hit") strat = new HitStrategy();
-
-        if (!strat) {
-            std::cout << "Nieznany ruch\n";
-            continue;
-        }
 
         std::string action = strat->getMoveName();
         if (action =="stand"){
@@ -163,9 +163,10 @@ int game::gameplay(int Bet, player &p, croupier &c, deck &d){
 
                 // check if player busted after each hit
                 if (p.is_busted()){
-                    std::cout << "Przegrywasz. Twoja ręka przekroczyła 21." << std::endl;
+                    std::cout << "Przegrywasz. " << std::endl;
                     wygrana = 0;
-                    return gamehelpy(wygrana, p, Bet);
+                    int decyzja = gamehelpy(wygrana, p, Bet);
+                    return decyzja;
                 }
 
                 std::cout << "Czy chcesz dobrać koleją kartę? (yes/no)" << std::endl;
@@ -177,14 +178,13 @@ int game::gameplay(int Bet, player &p, croupier &c, deck &d){
                         f = false;
                         return decyzja;
                     case 1:
-                        std::cout << "Kolejna runda!" << std::endl;
-                        // continue loop to hit again
+                        std::cout << "Kolejna karta!" << std::endl;
                         break;
                 }
             }
         }
         else {
-            std::cout << "Nie rozpoznano ruchu. Co chcesz zrobic? (stand/double/hit/split)" << std::endl;
+            std::cout << "Nie rozpoznano ruchu. Co chcesz zrobic? (stand/double/hit)" << std::endl;
             std::cin >> move;
         }
     }
