@@ -122,6 +122,12 @@ int game::res_stand(player &p, croupier &c, int Bet, int wygrana, deck &d){
 }
 
 int game::gameplay(int Bet, player &p, croupier &c, deck &d){
+    while (Bet > p.getBalance()){
+        std::cout << "Twój zakład przewyższa Twoje aktualne środki: " << p.getBalance() << std::endl;
+        std::cout << "Podaj nowy zakład: ";
+        std::cin >> Bet;
+    }
+
     bool f = true;
     int wygrana = 2137;
     while (f){
@@ -143,17 +149,33 @@ int game::gameplay(int Bet, player &p, croupier &c, deck &d){
         else if (move == "double") strat = new DoubleStrategy();
         else if (move == "hit") strat = new HitStrategy();
 
+        if (!strat) {
+            std::cout << "Nie rozpoznano ruchu. Co chcesz zrobic? (stand/double/hit)" << std::endl;
+            continue;
+        }
+
+
         std::string action = strat->getMoveName();
+        delete strat;
         if (action =="stand"){
             int decyzja = res_stand(p,c,Bet,wygrana,d);
             f = false;
             return decyzja;
         }
         else if (action  == "double"){
-            int decyzja = res_double(p,c,Bet,wygrana,d);
-            f = false;
-            return decyzja;
+            if (Bet * 2 > p.getBalance()){
+                std::cout << "Nie masz wystarczająco środków na double." << std::endl;
+                std::cout << "Co chcesz zrobic? (stand/hit)." << std::endl;
+                std::cin >> move;
+                continue; 
+            }
+            else {
+                int decyzja = res_double(p,c,Bet,wygrana,d);
+                f = false;
+                return decyzja;
+            }
         }
+
         else if (action  == "hit"){
             bool flag = true;
             int odp = 420;
@@ -182,10 +204,6 @@ int game::gameplay(int Bet, player &p, croupier &c, deck &d){
                         break;
                 }
             }
-        }
-        else {
-            std::cout << "Nie rozpoznano ruchu. Co chcesz zrobic? (stand/double/hit)" << std::endl;
-            std::cin >> move;
         }
     }
 }
