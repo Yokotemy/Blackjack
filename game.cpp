@@ -5,6 +5,7 @@
 #include "hand.h"
 #include "croupier.h"
 #include "player.h" 
+#include "move.h"
 
 game::game() : Player(), Croupier(), Deck() {}
 
@@ -131,18 +132,29 @@ int game::gameplay(int Bet, player &p, croupier &c, deck &d){
         }
 
         std::cout << "Co chcesz zrobic? (stand/double/hit/split)" << std::endl;
+        MoveStrategy* strat = nullptr;
         std::cin >> move;
-        if (move=="stand"){
+        if (move == "stand") strat = new StandStrategy();
+        else if (move == "double") strat = new DoubleStrategy();
+        else if (move == "hit") strat = new HitStrategy();
+
+        if (!strat) {
+            std::cout << "Nieznany ruch\n";
+            continue;
+        }
+
+        std::string action = strat->getMoveName();
+        if (action =="stand"){
             int decyzja = res_stand(p,c,Bet,wygrana,d);
             f = false;
             return decyzja;
         }
-        else if (move == "double"){
+        else if (action  == "double"){
             int decyzja = res_double(p,c,Bet,wygrana,d);
             f = false;
             return decyzja;
         }
-        else if (move == "hit"){
+        else if (action  == "hit"){
             bool flag = true;
             int odp = 420;
             while (flag){
