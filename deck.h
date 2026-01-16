@@ -1,18 +1,15 @@
-#ifndef BLACKJACK_DECK_H
-#define BLACKJACK_DECK_H
+#ifndef DECK_H
+#define DECK_H
 
-#include<vector>
+#include <vector>
 #include "card.h"
 
 class deck {
     std::vector<card> pile;
-
-    public:
-        deck();
-        void displayDeck(); // wyświetlenie talii
-        void shuffleDeck(); // potasowanie talii
-        card giveCard(); // zwraca kartę z talii
+public:
+    deck();
+    void shuffleDeck();
+    card giveCard();
 };
 
-
-#endif //BLACKJACK_DECK_H
+#endif
