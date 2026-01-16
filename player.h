@@ -1,22 +1,15 @@
-#ifndef BLACKJACK_PLAYER_H
-#define BLACKJACK_PLAYER_H
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include "person.h"
 
-class player: public person {
+class player : public person {
     int balance = 0;
-    bool stand = false;
-    public:
-        void setBalance(int newBalance);
-        void setBet(int B);
-        int getBalance();
-        void setStand();
-        void split(deck &D);
-        void setName(std::string& Name);
-        void hit(deck &D);
-        void setDouble(int Bet,deck &D);
-
+public:
+    void addBalance(int a) { balance += a; }
+    void subBalance(int a) { balance -= a; }
+    int getBalance() const { return balance; }
+    void playTurn(deck &d) override; // Implementacja w player.cpp
 };
-//stad chyba wyjebue te setstand itd bo mi lepiej to biedzie spiac w game
 
-#endif //BLACKJACK_PLAYER_H
+#endif
