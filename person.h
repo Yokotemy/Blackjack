@@ -1,25 +1,23 @@
-#ifndef BLACKJACK_PERSON_H
-#define BLACKJACK_PERSON_H
+#ifndef PERSON_H
+#define PERSON_H
 
-#include<vector>
-#include<string>
+#include <string>
 #include "hand.h"
 #include "deck.h"
-//trzrba zrobic zeby player i croupier dziedziczyly po person, idk jak mozesz ty:3
+
 class person {
-     protected:
-        std::string name;
-        std::vector<hand> hands;
-    public:
-        person();
-        person(std::string& name, std::vector<hand> hands);
-        void setName(std::string& Name);
-        void showDeck();
-        void takeCard(deck &D);
-        hand& getHand(int index); //zeby moc sie dostac do karty krupiera i ja zakryc
-        void clearHands();
-        int is_busted();
+protected:
+    std::string name;
+    hand myHand;
+public:
+    virtual ~person() = default;
+    void setName(std::string n) { name = n; }
+    std::string getName() const { return name; }
+    hand& getHand() { return myHand; }
+    virtual void playTurn(deck &d) = 0;
+    void takeCard(deck &d) { myHand.takeCard(d.giveCard()); }
+    bool isBusted() const { return myHand.calculateHand() > 21; }
+    void clear() { myHand.clear(); }
 };
 
-
-#endif //BLACKJACK_PERSON_H
+#endif
