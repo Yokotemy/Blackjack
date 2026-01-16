@@ -32,8 +32,26 @@ void game::displayState(player &p, croupier &c, bool showFull) const {
 
 void game::start(player &p, croupier &c, deck &d) {
     int bet;
-    std::cout << "Balans: " << p.getBalance() << " | Zaklad: "; std::cin >> bet;
-    if (bet > p.getBalance()) bet = p.getBalance();
+    std::cout << "Balans: " << p.getBalance() << " | Zaklad: ";
+    std::cin >> bet;
+
+    // Logika walidacji zakładu
+    if (bet > p.getBalance()) {
+        std::cout << "Nie masz tyle kasy! All-in (" << p.getBalance() << ")? [1-tak / 0-wpisz ponownie]: ";
+        int dec; std::cin >> dec;
+
+        if (dec == 1) {
+            bet = p.getBalance();
+        } else {
+            // Pętla dopóki gracz podaje kwotę większą niż ma na koncie
+            while (bet > p.getBalance() || bet <= 0) {
+                std::cout << "Podaj poprawny zaklad (max " << p.getBalance() << "): ";
+                std::cin >> bet;
+            }
+        }
+    }
+
+    // ZAWSZE odejmujemy balans po ustaleniu ostatecznej kwoty bet
     p.subBalance(bet);
 
     p.takeCard(d); p.takeCard(d);
@@ -43,27 +61,29 @@ void game::start(player &p, croupier &c, deck &d) {
     bool endP = false;
     while(!p.isBusted() && !endP) {
         displayState(p, c, false);
-        std::cout << "Ruch [h/s/d]: "; char ch; std::cin >> ch;
 
-        if(ch == 'h') {
-            HitStrategy s; 
-            std::cout << "Akcja: " << s.getMoveName() << "\n";
-            p.takeCard(d);
+        // Sprawdzamy czy gracz ma kasę na Double (musi mieć drugie tyle co bet)
+        if (p.getBalance() >= bet) {
+            std::cout << "Ruch [h/s/d]: "; char ch; std::cin >> ch;
+            if(ch == 'h') { HitStrategy s; std::cout << "Akcja: " << s.getMoveName() << "\n"; p.takeCard(d); }
+            else if(ch == 's') { StandStrategy s; std::cout << "Akcja: " << s.getMoveName() << "\n"; endP = true; }
+            else if(ch == 'd') {
+                DoubleStrategy s; std::cout << "Akcja: " << s.getMoveName() << "\n";
+                p.subBalance(bet);
+                bet *= 2;
+                p.takeCard(d);
+                endP = true;
+            }
         }
-        else if(ch == 's') {
-            StandStrategy s;
-            std::cout << "Akcja: " << s.getMoveName() << "\n";
-            endP = true;
-        }
-        else if(ch == 'd') {
-            DoubleStrategy s;
-            std::cout << "Akcja: " << s.getMoveName() << "\n";
-            p.subBalance(bet);
-            bet *= 2;
-            p.takeCard(d);
-            endP = true;
+        else {
+            std::cout << "Ruch [h/s]: "; char ch; std::cin >> ch;
+            if(ch == 'h') { HitStrategy s; std::cout << "Akcja: " << s.getMoveName() << "\n"; p.takeCard(d); }
+            else if(ch == 's') { StandStrategy s; std::cout << "Akcja: " << s.getMoveName() << "\n"; endP = true; }
         }
     }
+
+
+
     c.getHand().getCard(1).show();
     if(!p.isBusted()) {
         c.playTurn(d);
