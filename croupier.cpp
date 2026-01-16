@@ -1,11 +1,8 @@
-#ifndef CROUPIER_H
-#define CROUPIER_H
+#include "croupier.h"
 
-#include "person.h"
-
-class croupier : public person {
-public:
-    void playTurn(deck &d) override;
-};
-
-#endif
+void croupier::playTurn(deck &d) {
+    myHand.getCard(1).show();
+    while (myHand.calculateHand() < 17) {
+        takeCard(d);
+    }
+}
