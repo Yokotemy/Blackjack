@@ -1,213 +1,75 @@
-#include <iostream>
-#include <string>
 #include "game.h"
-#include "person.h"
-#include "hand.h"
-#include "croupier.h"
-#include "player.h" 
 #include "move.h"
+#include <iostream>
 
-game::game() : Player(), Croupier(), Deck() {}
-
-void game::setUpGame() {
-    std::string Name;
-    std::cout << "Podaj nazwę użytkownika: ";
-    std::cin >> Name;
-    Player.setName(Name);
-    std::cout << "\nPodaj ile masz pieniędzy: " ; //weź to refrase jakos ladnie bo to glupio brzmi XD
-    int mamona;
-    std::cin>> mamona;
-    Player.setBalance(mamona);
+void game::setUpGame(player &p) {
+    std::string n; int d;
+    std::cout << "=== BLACKJACK ===\n";
+    std::cout << "Podaj imie: "; std::cin >> n; p.setName(n);
+    std::cout << "Podaj depozyt: "; std::cin >> d; p.addBalance(d);
 }
 
-int game::compareDecks(hand& player, hand& croupier){
-    int player_value = player.calculateHand();
-    int croupier_value = croupier.calculateHand();
-    
-    if (player_value > croupier_value){
-        return 1;
-    }
-    else if (player_value < croupier_value){
-        return 2;
-    }
-    else {return 0;}
+std::string game::getHint(int pS, int dV) const {
+    if (pS >= 17) return "STAND";
+    if (pS <= 11) return "HIT";
+    if (pS >= 13 && dV <= 6) return "STAND";
+    return "HIT";
 }
 
-// helper function for payouts
-int gamehelpy(int wygrana, player &p, int Bet){
-    int decyzja = 69;
-    p.setBalance(wygrana);
-    wygrana = wygrana - Bet;
-    std::cout << "Twoja wygrana wynosi: " << wygrana
-              << " Twój obecny balans wynosi: " << p.getBalance() << std::endl;
-    if (p.getBalance() > 0){
-        std::cout << "Czy chcesz kontynuować grę (yes=1/no=0): " << std::endl;
-        std::cin >> decyzja;
-        switch(decyzja){
-            case 0:
-                std::cout << "Dzięki za grę!";
-                return 0; //to konczy wszystko wszystko i to bedzie obslugiwane w main
-            case 1:
-                std::cout << "Kolejna runda!";
-                return 1;
-        }
+void game::displayState(player &p, croupier &c, bool showFull) const {
+    std::cout << "--- STOL ---  " << std::endl;
+    std::cout << "KRUPIER: ";
+    if(!showFull) {
+        c.getHand().getCard(0).displayCard();
+        std::cout << " [???]";
+    } else {
+        c.getHand().displayHand();
+        std::cout << " (Suma: " << c.getHand().calculateHand() << ")";
     }
-    else {
-        std::cout << "Nie masz już pieniędzy. Koniec gry." << std::endl;
-        return 0;
-    }
+    std::cout << "\n GRACZ: "; p.getHand().displayHand();
+    std::cout << " (Suma: " << p.getHand().calculateHand() << ")\n";
 }
 
-int game::res_double(player &p, croupier &c, int Bet, int wygrana, deck &d){
-    p.takeCard(d);
-    p.setBet(Bet);
-    p.showDeck();
+void game::start(player &p, croupier &c, deck &d) {
+    int bet;
+    std::cout << "Balans: " << p.getBalance() << " | Zaklad: "; std::cin >> bet;
+    if (bet > p.getBalance()) bet = p.getBalance();
+    p.subBalance(bet);
 
-    // check if player busted
-    if (p.is_busted()){
-        std::cout << "Przegrywasz." << std::endl;
-        wygrana = 0;
-        c.getHand(0).getCard(1).show();
-        int decyzja = res_stand(p,c,Bet,wygrana,d);
-        return decyzja;
+    p.takeCard(d); p.takeCard(d);
+    c.takeCard(d); c.takeCard(d);
+    c.getHand().getCard(1).hide();
+
+    bool endP = false;
+    while(!p.isBusted() && !endP) {
+        displayState(p, c, false);
+        std::cout << "Ruch [h/s/d]: "; char ch; std::cin >> ch;
+        if(ch == 'h') p.takeCard(d);
+        else if(ch == 's') endP = true;
+        else if(ch == 'd') { p.subBalance(bet); bet *= 2; p.takeCard(d); endP = true; }
     }
 
-    c.getHand(0).getCard(1).show();
-
-    // check if croupier busted after drawing
-    if (c.is_busted()){
-        std::cout << "Krupier busted!" << std::endl;
-        wygrana = 2*Bet; 
-        return gamehelpy(wygrana, p, Bet);
+    c.getHand().getCard(1).show();
+    if(!p.isBusted()) {
+        c.playTurn(d);
     }
 
-    std::cout << "Twój obecny balans: " << p.getBalance() << std::endl;
-    Bet *= 2 ;
-    int decyzja = res_stand(p,c,Bet,wygrana,d);
-    return decyzja;
-}
+    std::cout << "\n========== KONIEC RUNDY ==========\n";
+    std::cout << "KRUPIER: "; c.getHand().displayHand();
+    std::cout << " (" << c.getHand().calculateHand() << ")" << (c.isBusted() ? " BUST!" : "") << "\n";
+    std::cout << "GRACZ:   "; p.getHand().displayHand();
+    std::cout << " (" << p.getHand().calculateHand() << ")" << (p.isBusted() ? " BUST!" : "") << "\n";
 
-int game::res_stand(player &p, croupier &c, int Bet, int wygrana, deck &d){
-    std::cout << "Karty krupiera: " << std::endl;
-    c.showDeck();
-    if (c.getHand(0).calculateHand() < 16){
-        c.takeCard(d);
-        std::cout << "Karty krupiera po dobraniu jednej karty: " << std::endl;
-        c.showDeck();
+    int ps = p.getHand().calculateHand();
+    int cs = c.getHand().calculateHand();
 
-        // check if croupier busted immediately
-        if (c.is_busted()){
-            std::cout << "Krupier busted! Wygrywasz!" << std::endl;
-            wygrana = 2*Bet;
-            return gamehelpy(wygrana, p, Bet);
-        }
-    }
+    std::cout << "WYNIK: ";
+    if (p.isBusted()) std::cout << "Przegrana (BUST)";
+    else if (cs > 21) { std::cout << "Wygrana (KRUPIER BUST)"; p.addBalance(bet * 2); }
+    else if (ps > cs) { std::cout << "Wygrana!"; p.addBalance(bet * 2); }
+    else if (ps == cs) { std::cout << "Remis (Push)"; p.addBalance(bet); }
+    else std::cout << "Przegrana";
+    std::cout << "\n==================================\n";
 
-    int res = 67;
-    res = compareDecks(p.getHand(0), c.getHand(0));
-    switch(res){
-        case 0:
-            std::cout << "Remis! Twój zakład wraca do Ciebie." << std::endl;
-            wygrana = Bet;
-            int decyzja = gamehelpy(wygrana, p, Bet);
-            return decyzja;
- 
-        case 1:
-            std::cout << "Wygrywasz!" << std::endl;
-            wygrana = 2*Bet;
-            int decyzja = gamehelpy(wygrana, p, Bet);
-            return decyzja;
-        case 2:
-            std::cout << "Przegrywasz." << std::endl;
-            wygrana = 0;
-            int decyzja = gamehelpy(wygrana, p, Bet);
-            return decyzja;
-    }
-}
-
-int game::gameplay(int Bet, player &p, croupier &c, deck &d){
-    while (Bet > p.getBalance()){
-        std::cout << "Twój zakład przewyższa Twoje aktualne środki: " << p.getBalance() << std::endl;
-        std::cout << "Podaj nowy zakład: ";
-        std::cin >> Bet;
-    }
-
-    bool f = true;
-    int wygrana = 2137;
-    while (f){
-        std::string move;
-
-        // check if player has blackjack
-        if (p.getHand(0).calculateHand() == 21){
-            std::cout << "BLACKJACK! Wygrywasz!\n";
-            wygrana = 2.5*Bet;
-            int decyzja = gamehelpy(wygrana, p, Bet);
-            f = false;
-            return decyzja;
-        }
-
-        std::cout << "Co chcesz zrobic? (stand/double/hit): " << std::endl;
-        MoveStrategy* strat = nullptr;
-        std::cin >> move;
-        if (move == "stand") strat = new StandStrategy();
-        else if (move == "double") strat = new DoubleStrategy();
-        else if (move == "hit") strat = new HitStrategy();
-
-        if (!strat) {
-            std::cout << "Nie rozpoznano ruchu. Co chcesz zrobic? (stand/double/hit)" << std::endl;
-            continue;
-        }
-
-
-        std::string action = strat->getMoveName();
-        delete strat;
-        if (action =="stand"){
-            int decyzja = res_stand(p,c,Bet,wygrana,d);
-            f = false;
-            return decyzja;
-        }
-        else if (action  == "double"){
-            if (Bet * 2 > p.getBalance()){
-                std::cout << "Nie masz wystarczająco środków na double." << std::endl;
-                std::cout << "Co chcesz zrobic? (stand/hit)." << std::endl;
-                std::cin >> move;
-                continue; 
-            }
-            else {
-                int decyzja = res_double(p,c,Bet,wygrana,d);
-                f = false;
-                return decyzja;
-            }
-        }
-
-        else if (action  == "hit"){
-            bool flag = true;
-            int odp = 420;
-            while (flag){
-                p.takeCard(d);
-                p.showDeck();
-
-                // check if player busted after each hit
-                if (p.is_busted()){
-                    std::cout << "Przegrywasz. " << std::endl;
-                    wygrana = 0;
-                    int decyzja = gamehelpy(wygrana, p, Bet);
-                    return decyzja;
-                }
-
-                std::cout << "Czy chcesz dobrać koleją kartę? (yes/no)" << std::endl;
-                std::cin >> odp;
-                switch(odp){
-                    case 0:
-                        int decyzja = res_stand(p,c,Bet,wygrana,d);
-                        flag = false;
-                        f = false;
-                        return decyzja;
-                    case 1:
-                        std::cout << "Kolejna karta!" << std::endl;
-                        break;
-                }
-            }
-        }
-    }
+    p.clear(); c.clear();
 }
