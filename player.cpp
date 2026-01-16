@@ -9,6 +9,8 @@ void player::setBet(int B) {
 int player::getBalance() {
     return balance;
 }
+
+//i ja chyba tego (stand hit doible) i tak nie uzywam nigdzie tlyko samodzielnie to robie w gameplay
 void player::setStand() {
     stand = true;
 }

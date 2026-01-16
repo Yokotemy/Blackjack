@@ -20,6 +20,8 @@ class game {
         int gameplay(int Bet, player &p, croupier &c, deck &d);//bedzie zwracac czy gracz chce kolejne rundy(1) czy konczy(0)
         int compareDecks(hand& player, hand& croupier); //ja bym zrobila int gdzie np 0-to samo, 1-gracz wincyj, 2-krupier wincyj
         int res_double(player &p, croupier &c, int Bet, int wygrana,deck &d);
+        int res_stand(player &p, croupier &c, int Bet, int wygrana,deck &d);
+        
 
 
 };

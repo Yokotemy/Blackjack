@@ -39,11 +39,11 @@ void card::show(){
     visible = true;
 }
 
-bool card::isVisible(){
+bool card::isVisible()const {
     return visible;
 }
 
-void card::displayCard() {
+void card::displayCard() const {
     if (!visible){
         std::cout << "Hidden card";
         return;
@@ -51,6 +51,7 @@ void card::displayCard() {
     std::cout << faceToString(face) << ' ' << colorToString(color) << std::endl;
 }
 
-Face card::getFace() {
+
+Face card::getFace() const {
     return face;
 }
