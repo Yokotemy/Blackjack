@@ -44,11 +44,26 @@ void game::start(player &p, croupier &c, deck &d) {
     while(!p.isBusted() && !endP) {
         displayState(p, c, false);
         std::cout << "Ruch [h/s/d]: "; char ch; std::cin >> ch;
-        if(ch == 'h') p.takeCard(d);
-        else if(ch == 's') endP = true;
-        else if(ch == 'd') { p.subBalance(bet); bet *= 2; p.takeCard(d); endP = true; }
-    }
 
+        if(ch == 'h') {
+            HitStrategy s; 
+            std::cout << "Akcja: " << s.getMoveName() << "\n";
+            p.takeCard(d);
+        }
+        else if(ch == 's') {
+            StandStrategy s;
+            std::cout << "Akcja: " << s.getMoveName() << "\n";
+            endP = true;
+        }
+        else if(ch == 'd') {
+            DoubleStrategy s;
+            std::cout << "Akcja: " << s.getMoveName() << "\n";
+            p.subBalance(bet);
+            bet *= 2;
+            p.takeCard(d);
+            endP = true;
+        }
+    }
     c.getHand().getCard(1).show();
     if(!p.isBusted()) {
         c.playTurn(d);
