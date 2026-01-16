@@ -1,57 +1,22 @@
-#include <ctime>
-#include <iostream>
-#include <ostream>
-#include <random>
 #include "deck.h"
+#include <algorithm>
+#include <ctime>
 
-// pomocnicze listy do budowy talii
-static Face faces[] = {
-    Face::two, Face::three, Face::four, Face::five,
-    Face::six, Face::seven, Face::eight, Face::nine, Face::ten,
-    Face::jack, Face::queen, Face::king, Face::ace};
-
-static Color colors[] = {Color::clover, Color::spade, Color::heart, Color::diamond};
-
-
-deck::deck(){
-    for (Face f : faces) {
-        for (Color c : colors) {
-            pile.push_back(card(f, c));
-        }
-    }
-}
-
-
-void deck::displayDeck() {
-    for (const auto& c : pile){
-        c.displayCard();
-    }
-    std::cout << std::endl;
-}
+deck::deck() { shuffleDeck(); }
 
 void deck::shuffleDeck() {
     pile.clear();
-
-    for (Face f : faces) {
-        for (Color c : colors) {
-            pile.push_back(card(f, c));
-        }
-    }
-
-    std::cout << "Shuffling deck..." << std::endl;
-    std::srand(time(nullptr));
-    for (size_t i = pile.size()-1; i>0; i--) {
-        int j = rand() % (i+1);
-        std::swap(pile[i], pile[j]);
-    }
+    Face fs[] = {Face::two, Face::three, Face::four, Face::five, Face::six, Face::seven, Face::eight, Face::nine, Face::ten, Face::jack, Face::queen, Face::king, Face::ace};
+    Color cs[] = {Color::clover, Color::spade, Color::heart, Color::diamond};
+    for(int t=0; t<4; t++) for(auto f : fs) for(auto c : cs) pile.push_back(card(f, c));
+    std::srand(static_cast<unsigned>(std::time(0)));
+    std::random_shuffle(pile.begin(), pile.end());
 }
 
-
 card deck::giveCard() {
-    if (pile.empty()) {
-        shuffleDeck();
-    }
-    card tmp = pile.back();
+    if (pile.empty()) shuffleDeck();
+    card c = pile.back();
     pile.pop_back();
-    return tmp;
+    // Logika licznika usunięta - teraz tylko zwracamy kartę
+    return c;
 }
